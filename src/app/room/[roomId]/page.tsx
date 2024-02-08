@@ -12,7 +12,7 @@ interface PageProps {
   };
 }
 
-const page = ({ params }: PageProps) => {
+const Page = ({ params }: PageProps) => {
   const { roomId } = params;
 
   const { data: roomMessage, isFetching } = useQuery<Message[]>({
@@ -38,4 +38,4 @@ const page = ({ params }: PageProps) => {
   );
 };
 
-export default page;
+export default Page;
