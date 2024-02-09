@@ -15,7 +15,11 @@ interface PageProps {
 const Page = ({ params }: PageProps) => {
   const { roomId } = params;
 
-  const { data: roomMessage, isFetching } = useQuery<Message[]>({
+  const {
+    data: roomMessage,
+    isFetching,
+    refetch,
+  } = useQuery<Message[]>({
     queryKey: ["room", roomId],
     queryFn: () => fetcher(`/api/roomMessages/${roomId}`),
   });
@@ -30,8 +34,8 @@ const Page = ({ params }: PageProps) => {
       <p>messages:</p>
       <Messages
         roomId={roomId}
+        refetch={refetch}
         initialMessages={serializedMessages}
-        isFetching={isFetching}
       />
       <MessageField roomId={roomId} isFetching={isFetching} />
     </div>

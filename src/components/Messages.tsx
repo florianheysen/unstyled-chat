@@ -4,28 +4,28 @@ import { useQueryClient } from "@tanstack/react-query";
 import { FC, useEffect } from "react";
 
 interface MessagesProps {
-  isFetching: boolean;
   initialMessages?: {
     text: string;
     id: string;
   }[];
   roomId: string;
+  refetch: () => void;
 }
 
-const Messages: FC<MessagesProps> = ({
-  isFetching,
-  initialMessages,
-  roomId,
-}) => {
+const Messages: FC<MessagesProps> = ({ initialMessages, roomId, refetch }) => {
   const queryClient = useQueryClient();
 
   useEffect(() => {
     pusherClient.subscribe(roomId);
 
     pusherClient.bind("incoming-message", () => {
+      console.log("incoming-message recieved");
+
       queryClient.invalidateQueries({
         queryKey: ["room", roomId],
       });
+
+      refetch();
     });
 
     return () => {
