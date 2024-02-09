@@ -5,6 +5,7 @@ import Messages from "@/components/Messages";
 import { Message } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import { fetcher } from "@/lib/fetcher";
+import { useState } from "react";
 
 interface PageProps {
   params: {
@@ -14,9 +15,10 @@ interface PageProps {
 
 const Page = ({ params }: PageProps) => {
   const { roomId } = params;
+  const [sendingMessage, setSendingMessage] = useState<string | null>(null);
 
   const {
-    data: roomMessage,
+    data: initialMessages,
     isFetching,
     refetch,
   } = useQuery<Message[]>({
@@ -24,7 +26,7 @@ const Page = ({ params }: PageProps) => {
     queryFn: () => fetcher(`/api/roomMessages/${roomId}`),
   });
 
-  const serializedMessages = roomMessage?.map((message) => ({
+  const serializedMessages = initialMessages?.map((message) => ({
     text: message.text,
     id: message.id,
   }));
@@ -35,9 +37,15 @@ const Page = ({ params }: PageProps) => {
       <Messages
         roomId={roomId}
         refetch={refetch}
-        initialMessages={serializedMessages}
+        isFetching={isFetching}
+        messages={serializedMessages}
+        sendingMessage={sendingMessage}
       />
-      <MessageField roomId={roomId} isFetching={isFetching} />
+      <MessageField
+        roomId={roomId}
+        setSendingMessage={setSendingMessage}
+        isFetching={isFetching}
+      />
     </div>
   );
 };
