@@ -53,8 +53,8 @@ const Messages: FC<MessagesProps> = ({
       {messages.map((message) => (
         <li key={message.id}>{message.text}</li>
       ))}
-      {sendingMessage && <li className="text-blue-500">{sendingMessage}</li>}
-      {isFetching && <li className="text-red-500">{incommingMessage?.text}</li>}
+      {sendingMessage && <li className="opacity-50">{sendingMessage}</li>}
+      {isFetching && !sendingMessage && <li>{incommingMessage?.text}</li>}
     </div>
   );
 };
