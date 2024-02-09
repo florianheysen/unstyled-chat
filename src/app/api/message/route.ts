@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     },
   });
 
-  pusherServer.trigger(roomId, "incoming-message", null);
+  await pusherServer.trigger(roomId, "incoming-message", null);
   console.log("incoming-message sent");
 
   return new Response(JSON.stringify({ success: true }));
